@@ -18,16 +18,16 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 <./main.adofai> means a path to a .adofai file which should be an ADOFAI level.
 
-## 维护者
+## Contributor
 
 [@qwertycxz](https://github.com/qwertycxz)
 
-## 如何贡献
+## How could I contribute?
 
 [Issue](https://github.com/qwertycxz/NUIST-VPN/issues/new) please!
 
 Please notice that [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/) should be follow.
 
-## 使用许可
+## License
 
 [Apache 2.0](LICENSE) © qwertycxz
