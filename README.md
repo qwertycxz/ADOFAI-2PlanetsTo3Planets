@@ -1,4 +1,4 @@
-# NUIST-VPN
+# ADOFAI-2PlanetsTo3Planets
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
@@ -24,7 +24,7 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 ## How could I contribute?
 
-[Issue](https://github.com/qwertycxz/NUIST-VPN/issues/new) please!
+[Issue](https://github.com/qwertycxz/ADOFAI-2PlanetsTo3Planets/issues/new) and Pull-requests is both welcome
 
 Please notice that [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/) should be follow.
 
