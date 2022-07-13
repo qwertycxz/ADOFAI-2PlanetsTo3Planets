@@ -26,7 +26,7 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 [Issue](https://github.com/qwertycxz/NUIST-VPN/issues/new) please!
 
-Please notice that [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/)should be follow.
+Please notice that [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/) should be follow.
 
 ## 使用许可
 
