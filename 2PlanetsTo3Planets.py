@@ -1,7 +1,6 @@
 from json import dump
 from os.path import splitext
 from sys import argv
-clockwise = True
 def setAngle(angle, hairpin = False):
 	if angle < -360 or angle == -360 and hairpin:
 		angle += 720
@@ -53,10 +52,14 @@ if main.__contains__('pathData'):
 		elif c == '!':
 			main['angleData'].append(999)
 main['settings']['bpm'] *= 2 / 3
-old_angle = 999
-twirls = {}
+holds, twirls = {}, {}
 for i, action in enumerate(main['actions']):
-	if action['eventType'] == 'Twirl':
+	if action['eventType'] == 'Hold' and action['duration'] > 0:
+		holds[action['floor']] = {
+			'degree': action['duration'] * 360,
+			'index': i,
+		}
+	elif action['eventType'] == 'Twirl':
 		twirls[action['floor']] = True
 	elif action.__contains__('beatsPerMinute'):
 		main['actions'][i]['beatsPerMinute'] *= 2 / 3
@@ -65,6 +68,7 @@ main['actions'].append({
 	"floor": 1,
 	"planets": 3,
 })
+clockwise, old_angle = True, 999
 for i, angle in enumerate(main['angleData']):
 	if twirls.__contains__(i):
 		clockwise = not clockwise
@@ -80,6 +84,10 @@ for i, angle in enumerate(main['angleData']):
 			degree *= 2 / 3
 			if main['angleData'][i - 1] != 999:
 				degree += 60
+			if holds.__contains__(i):
+				hold_degree = degree + holds[i]['degree'] * 2 / 3
+				degree = hold_degree % 360
+				main['actions'][holds[i]['index']]['duration'] = (hold_degree - degree) / 360
 			last_angle = main['angleData'][i - 2]
 			if main['angleData'][i - 1] != 999:
 				last_angle = main['angleData'][i - 1] + 180
