@@ -18,6 +18,12 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 <./main.adofai> means a path to a .adofai file which should be an ADOFAI level.
 
+## Changelog
+
+2022/7/18: Add several options and their help. Converting 3 planets to 3 planets now gives warning. 
+
+2022/7/14: Add support for holds which more than 1 lap.
+
 ## Contributor
 
 [@qwertycxz](https://github.com/qwertycxz)
