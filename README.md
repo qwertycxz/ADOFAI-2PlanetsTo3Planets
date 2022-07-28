@@ -20,6 +20,10 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 ## Changelog
 
+2022/7/28: Fix that the degree isn't correct when a hold is less than 60°. 
+
+2022/7/26: Add a GUI version. 
+
 2022/7/18: Add several options and their help. Converting 3 planets to 3 planets now gives warning. 
 
 2022/7/14: Add support for holds which more than 1 lap.
