@@ -185,6 +185,8 @@ def convertPlanets():
 					if holds.__contains__(i): # The degrees of the blocks before hold are not as same as after normal blocks
 						hold_degree = degree + holds[i]['degree'] * 2 / 3 # One lap used to be a 360° now is 240°
 						degree = hold_degree % 360
+						if degree <= 60:
+							hold_degree -= 360
 						new_main['actions'][holds[i]['index']]['duration'] = (hold_degree - degree) / 360
 				last_angle = new_main['angleData'][i - 2] # When midspins, angle count from i - 2 angle
 				if new_main['angleData'][i - 1] != 999: # When not midspins, angle count from i - 1 angle
