@@ -33,44 +33,64 @@ def openFile():
 	except PermissionError:
 		showwarning('Permission Error', 'Not enough permission to read the file.')
 		return
+	fifteen = set()
 	if main.__contains__('pathData'): # In the old version adofai levels, instead of angleData, there's pathData which is un-read-able. So convert pathData to angleData first
 		main['angleData'] = []
 		pathData = main.pop('pathData') # We don't need pathData anymore
 		for c in pathData: # pathData is a string
 			if c == 'R': # Ugly, but my python is too old(3.8) to do matching
 				main['angleData'].append(0)
+			elif c == 'p':
+				main['angleData'].append(15)
 			elif c == 'J':
 				main['angleData'].append(30)
 			elif c == 'E':
 				main['angleData'].append(45)
 			elif c == 'T':
 				main['angleData'].append(60)
+			elif c == 'o':
+				main['angleData'].append(75)
 			elif c == 'U':
 				main['angleData'].append(90)
+			elif c == 'q':
+				main['angleData'].append(105)
 			elif c == 'G':
 				main['angleData'].append(120)
 			elif c == 'Q':
 				main['angleData'].append(135)
 			elif c == 'H':
 				main['angleData'].append(150)
+			elif c == 'W':
+				main['angleData'].append(165)
 			elif c == 'L':
 				main['angleData'].append(180)
+			elif c == 'x':
+				main['angleData'].append(195)
 			elif c == 'N':
 				main['angleData'].append(210)
 			elif c == 'Z':
 				main['angleData'].append(225)
 			elif c == 'F':
 				main['angleData'].append(240)
+			elif c == 'V':
+				main['angleData'].append(255)
 			elif c == 'D':
 				main['angleData'].append(270)
+			elif c == 'Y':
+				main['angleData'].append(285)
 			elif c == 'B':
 				main['angleData'].append(300)
 			elif c == 'C':
 				main['angleData'].append(315)
 			elif c == 'M':
 				main['angleData'].append(330)
+			elif c == 'A':
+				main['angleData'].append(345)
 			elif c == '!':
 				main['angleData'].append(999)
+			else:
+				fifteen.add(c)
+	print(fifteen)
 	accelerates, holds, multiplanets, twirls = {}, {}, {}, {}
 	for i, action in enumerate(main['actions']): # Enumerate all the actions
 		if action['eventType'] == 'Hold' and action['duration'] > 0: # Only record holds more than 1 lap
