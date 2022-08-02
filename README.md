@@ -20,6 +20,8 @@ python 2PlanetsTo3Planets.py <./main.adofai>
 
 ## Changelog
 
+2022/8/2:  Add a whole new panel that you can choose from-planet amount and to-planet amount.
+
 2022/7/28: Fix that the degree isn't correct when a hold is less than 60°. 
 
 2022/7/26: Add a GUI version. 
