@@ -64,6 +64,8 @@ def loadLevel(main):
 				main['angleData'].append(345)
 			elif c == '!':
 				main['angleData'].append(999)
+	else:
+		main['angleData'] = list(map(lambda angle: round(angle, 2), main['angleData']))
 	accelerates, holds, multiplanets, twirls = {}, {}, {}, {} # Four different actions data
 	for i, action in enumerate(main['actions']): # Enumerate all the actions
 		if action['eventType'] == 'Hold': # Lots of if-else
@@ -93,6 +95,8 @@ def loadLevel(main):
 	return accelerates, holds, multiplanets, twirls, length, main, planets
 # Math time!
 def convertLevel(convert_interval, from_amount, to_amount, main, planets):
+	main['settings']['beatsAhead'] *= from_amount / to_amount
+	main['settings']['beatsBehind'] *= from_amount / to_amount
 	for i, action in enumerate(main['actions']): # Enumerate all the actions
 		if planets[action['floor']] == -to_amount: # All planets to convert should be from_amount / to_amount speed
 			if action['eventType'] == 'AnimateTrack': # FIXME: The decorations moves are now working bad
