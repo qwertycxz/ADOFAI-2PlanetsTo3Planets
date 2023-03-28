@@ -14,11 +14,31 @@ The file's goal:
 
 ## Usage
 
-python 2PlanetsTo3Planets.py <./main.adofai>
+### GUI mode
+
+2PlanetsTo3Planets.exe
+
+or
+
+python 2PlanetsTo3Planets.py
+
+### CLI mode
+
+python 2PlanetsTo3Planets.py [<input_path> [options]]
+
+General Options:
+  -f <number> Set the from-planet amount. Default 2
+  -t <number> Set the to-planet amount. Default 3
+  -s <number> Set the start of converting. Default the first block(-s 1).
+  -e <number> Set the end of converting. Default the last block.
+  -o <path>   Set the output path.
+  -m          Multiple input mode. Ingore -s or -e options.
 
 <./main.adofai> means a path to a .adofai file which should be an ADOFAI level.
 
 ## Changelog
+
+2022/3/28: Fix a bug about float.
 
 2022/9/7:  Combine 2planetsto3planets.py and GUI.py. Fix 1 bug: Hold converting is not correct. 1 New feature: Convert camera and track moves now!
 
