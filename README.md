@@ -1,6 +1,17 @@
 # ADOFAI-2PlanetsTo3Planets
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/qwertycxz/ADOFAI-2PlanetsTo3Planets/main)
+![GitHub top language](https://img.shields.io/github/languages/top/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub all releases](https://img.shields.io/github/downloads/qwertycxz/ADOFAI-2PlanetsTo3Planets/total)
+![GitHub issues](https://img.shields.io/github/issues/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub](https://img.shields.io/github/license/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![GitHub last commit](https://img.shields.io/github/last-commit/qwertycxz/ADOFAI-2PlanetsTo3Planets)
+![Python version](https://img.shields.io/badge/python-%3E%3D%203.10-blue)
 
 A single python file that could automatically turn a 2-planets ADOFAI level to a 3-planets ADOFAI level (and more).
 
@@ -64,7 +75,7 @@ from planetamountconvert import Level
 
 ## Changelog
 
-2023/4/17: Rewrite all scripts with OOP. Use json and argparse instead of eval and getopt. Add type hint. Optimize GUI and CLI experince.
+2023/4/18: Rewrite all scripts with pythonic OOP. Use json and argparse instead of eval and getopt. Add type hint. Optimize GUI and CLI experince.
 
 2022/3/28: Fix a bug about float.
 
