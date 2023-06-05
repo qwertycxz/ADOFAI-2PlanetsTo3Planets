@@ -60,6 +60,11 @@ formatLevelString: Callable[[str], str] = lambda string: sub(',(?=\s*[\]},])|(?<
 '''Fix some wrong commas and some unnecessary next-lines. Return a JSON-like string.
 	- string -- A string read from a .adofai file
 '''
+planets_string = {
+	'TwoPlanets': 2,
+	'ThreePlanets': 3,
+}
+'Transform string planets to integer'
 class Level:
 	'''An adofai level, ready converting or already converted to 3 planets (and more).
 
@@ -86,6 +91,8 @@ class Level:
 	'One single action or decoration'
 	_actions = ('beatsAhead', 'beatsBehind', 'beatsPerMinute', 'duration', 'holdMidSoundDelay','repetitions')
 	'All the multiplier need to be multiplied'
+	level_path = ''
+	'The path of level. If the level is not loaded from a path, it will be blank'
 
 
 	def __init__(self, main: dict[str, str | dict[str, _RealOrStr | bool | list[_Real]] | list[_Action | _Real]] = dict()):
@@ -102,6 +109,8 @@ class Level:
 		'All multiplanet actions'
 		self.twirls = dict()
 		'All twirl actions'
+		self.useless_actions = list()
+		'All useless actions'
 
 
 	def __len__(self):
@@ -122,6 +131,7 @@ class Level:
 		'''Load a .adofai as self.main
 			- path -- A pathlib.Path instance or a literal path
 		'''
+		self.level_path = str(path)
 		with path.open(encoding = 'utf-8-sig') if isinstance(path, Path) else open(path, encoding = 'utf-8-sig') as f:
 			string = formatLevelString(f.read())
 		return self.loadMainFromString(string)
@@ -132,7 +142,11 @@ class Level:
 		self.planets = list()
 		planet = 2
 		for i in range(self.length + 1):
-			planet = self.multiplanets[i]['planets'] if i in self.multiplanets else planet
+			if i in self.multiplanets:
+				if self.multiplanets[i]['planets'] in planets_string:
+					planet = planets_string[self.multiplanets[i]['planets']]
+				else:
+					planet = self.multiplanets[i]['planets']
 			self.planets.append({'from': planet, 'to': planet})
 		return self
 
@@ -172,6 +186,7 @@ class Level:
 			'index': index,
 			'planets': action['planets'],
 		}
+		self.useless_actions.append(self.main['actions'][index])
 		return self
 
 
@@ -265,14 +280,11 @@ class Level:
 				})
 			elif self.accelerates[index]['speedType'] == 'Multiplier':
 				self.main['actions'][self.accelerates[index]['index']]['bpmMultiplier'] *= rate
-			if not index in self.multiplanets:
-				self.main['actions'].append({
-					"eventType": "MultiPlanet",
-					"floor": index,
-					"planets": self.planets[index]['to'],
-				})
-			else:
-				self.main['actions'][self.multiplanets[index]['index']]['planets'] = self.planets[index]['to']
+			self.main['actions'].append({
+				"eventType": "MultiPlanet",
+				"floor": index,
+				"planets": self.planets[index]['to'],
+			})
 
 		last_angle = self.main['angleData'][index - 2] if midspin else self.main['angleData'][index - 1] + 180
 		self.main['angleData'][index] = round(last_angle - degree if clockwise else degree + last_angle, 2) % 360
@@ -297,12 +309,9 @@ class Level:
 				old_angle = angle
 				old_planets = self.planets[i]['to']
 
-		useless_actions = []
 		for i in self.main['actions']: # FIXME: useless bpm-changing actions cannot be removed
-			i['eventType'] == 'SetSpeed' and i['bpmMultiplier'] == 1 and i['speedType'] == 'Multiplier' and useless_actions.append(i)
-		for i, planet in enumerate(self.planets):
-			i in self.multiplanets and (not i or planet['to'] != self.multiplanets[i] or self.planets[i - 1]['to'] == self.multiplanets[i]) and useless_actions.append(self.main['actions'][self.multiplanets[i]['index']])
-		for i in useless_actions:
+			i['eventType'] == 'SetSpeed' and i['bpmMultiplier'] == 1 and i['speedType'] == 'Multiplier' and self.useless_actions.append(i)
+		for i in self.useless_actions:
 			self.main['actions'].remove(i)
 		return self
 
