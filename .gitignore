@@ -1,3 +1,6 @@
 __pycache__
 .vscode
 anotherfile.py
+build
+dist
+*.spec

@@ -36,9 +36,13 @@ with open(input(), 'w') as f:
 Change planet amount each time changing speed
 Get the input and output path from tkinter
 '''
+from planetamountconvert import formatLevelString, Level
 from tkinter.filedialog import askopenfilename, asksaveasfile
 
-level = Level().loadMainFromPath(askopenfilename()).loadLevelFromMain() # Chained calls support
+level_string = ''
+with open(askopenfilename(), encoding = 'utf-8-sig') as f: # Watch out the encoding
+	level_string = formatLevelString(f.read())
+level = Level().loadMainFromString(level_string).loadLevelFromMain() # Chained calls support
 
 last_set_speed = 0
 accelerates = level.getActions('SetSpeed') # Get all actions that 'eventType': 'SetSpeed'
@@ -63,6 +67,7 @@ Get the input and output path from pathlib.Path
 Warning: the level converted by the example down below cannot be played
 More than 3 planets are not available in game.
 '''
+from planetamountconvert import Level
 from pathlib import Path
 
 directory:Path

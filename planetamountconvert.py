@@ -15,12 +15,13 @@ from tkinter import Button, Entry, Frame, Label, Menu, Spinbox, Tk
 from tkinter.filedialog import askopenfilename, asksaveasfile
 from tkinter.messagebox import showwarning
 from tkinter.ttk import Treeview
-from typing import Any, TYPE_CHECKING
+from typing import Any, Callable, IO, Literal, TYPE_CHECKING
 from warnings import warn
 from webbrowser import open_new_tab
 if TYPE_CHECKING:
 	from _typeshed import FileDescriptorOrPath
-	from typing import Callable, IO, Literal
+else:
+	FileDescriptorOrPath = Any
 
 
 
@@ -55,8 +56,8 @@ path_data = {
 	- key -- char
 	- value -- int
 '''
-formatLevelString: Callable[[str], str] if TYPE_CHECKING else Any = lambda string: sub(',(?=\s*[\]},])|(?<![\[{,])\s*\n(?!\s*[\]}])', '', string.replace(']\n', '],\n'))
-'''Fix some wrong commas and next-lines
+formatLevelString: Callable[[str], str] = lambda string: sub(',(?=\s*[\]},])|(?<![\[{,])\s*\n(?!\s*[\]}])', '', string.replace(']\n', '],\n'))
+'''Fix some wrong commas and some unnecessary next-lines. Return a JSON-like string.
 	- string -- A string read from a .adofai file
 '''
 class Level:
@@ -83,6 +84,9 @@ class Level:
 	'Real number or string'
 	_Action = dict[str, _RealOrStr | list[_RealOrStr]]
 	'One single action or decoration'
+	_actions = ('beatsAhead', 'beatsBehind', 'beatsPerMinute', 'duration', 'holdMidSoundDelay','repetitions')
+	'All the multiplier need to be multiplied'
+
 
 	def __init__(self, main: dict[str, str | dict[str, _RealOrStr | bool | list[_Real]] | list[_Action | _Real]] = dict()):
 		'''An adofai level, ready converting or already converted to 3 planets (and more)
@@ -107,18 +111,18 @@ class Level:
 
 
 	def loadMainFromString(self, string: str):
-		'''Load a json-like string as self.main
+		'''Load a JSON-like string as self.main
 			- string -- A json-like string
 		'''
 		self.main = loads(string)
 		return self
 
 
-	def loadMainFromPath(self, path: Path | FileDescriptorOrPath if TYPE_CHECKING else Any):
+	def loadMainFromPath(self, path: Path | FileDescriptorOrPath):
 		'''Load a .adofai as self.main
 			- path -- A pathlib.Path instance or a literal path
 		'''
-		with path.open(encoding='utf-8-sig') if isinstance(path, Path) else open(path, encoding='utf-8-sig') as f:
+		with path.open(encoding = 'utf-8-sig') if isinstance(path, Path) else open(path, encoding = 'utf-8-sig') as f:
 			string = formatLevelString(f.read())
 		return self.loadMainFromString(string)
 
@@ -133,7 +137,7 @@ class Level:
 		return self
 
 
-	def setPlanets(self, start: int, end: int, to: int, onStartBiggerThanEnd: Callable[[str], None] if TYPE_CHECKING else Any = lambda message: warn(message, SyntaxWarning, 3)):
+	def setPlanets(self, start: int, end: int, to: int, onStartBiggerThanEnd: Callable[[str], None] = lambda message: warn(message, SyntaxWarning, 3)):
 		'''Set the planet amount that is going to convert
 			- start -- A positive integer
 			- end -- A positive integer, must smaller than the length of the level
@@ -183,7 +187,7 @@ class Level:
 		return self
 
 
-	def getActions(self, event_type: str, event_list: Literal['actions', 'decorations'] if TYPE_CHECKING else Any = 'actions') -> dict[int, _Action]:
+	def getActions(self, event_type: str, event_list: Literal['actions', 'decorations'] = 'actions') -> dict[int, _Action]:
 		'''Get a dict with one kind of action
 			- event_type -- The ``eventType`` string
 			- event_list -- This action is at actions or in decorations? (default:``actions``)
@@ -215,8 +219,7 @@ class Level:
 
 		if 'pathData' in self.main:
 			self.main['angleData'] = []
-			pathData = self.main.pop('pathData')
-			for i in pathData:
+			for i in self.main.pop('pathData'):
 				self.main['angleData'].append(path_data[i])
 		else:
 			self.main['angleData'] = list(map(lambda angle: round(angle, 2), self.main['angleData']))
@@ -278,10 +281,9 @@ class Level:
 
 	def convertByPlanets(self):
 		'convert the whole level according to the planet amount set by Level.setPlanets()'
-		actions = ('beatsAhead', 'beatsBehind', 'beatsPerMinute', 'duration', 'holdMidSoundDelay','repetitions')
 		for action in self.main['actions']:
 			rate = self.planets[action['floor']]['from'] / self.planets[action['floor']]['to']
-			for i in actions:
+			for i in self._actions:
 				if i in action:
 					action[i] *= rate
 
@@ -303,11 +305,11 @@ class Level:
 		for i in useless_actions:
 			self.main['actions'].remove(i)
 		return self
-	
 
-	def dumpMain(self, file: IO if TYPE_CHECKING else Any = None):
-		'''Return and dump self.main.
-			- file -- ``f`` in ``with open(...) as f`` (default:``None``)
+
+	def dumpMain(self, file: IO[str] = None):
+		'''Return (and dump) self.main.
+			- file -- ``f`` from ``with open(...) as f`` (default:``None``)
 		'''
 		if file:
 			dump(self.main, file)
@@ -350,9 +352,8 @@ if __name__ == '__main__':
 				parser.error('-s argument out of range: ' + '\033[93m' + i + '\033[0m')
 			except ValueError:
 				parser.error('Got wrong -s argument: ' + '\033[93m' + i + '\033[0m')
-		
+
 		input_path, input_extension = splitext(args.input_path)
-		print('Loaded Success. Converting')
 		try:
 			with open(args.output or input_path + '(3Planets)' + input_extension, 'w') as f:
 				level.convertByPlanets().dumpMain(f)
