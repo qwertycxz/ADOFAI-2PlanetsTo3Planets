@@ -75,6 +75,8 @@ from planetamountconvert import Level
 
 ## Changelog
 
+2023/6/5:  Fix a bug due to the game update.
+
 2023/4/18: Rewrite all scripts with pythonic OOP. Use json and argparse instead of eval and getopt. Add type hint. Optimize GUI and CLI experince.
 
 2022/3/28: Fix a bug about float.
